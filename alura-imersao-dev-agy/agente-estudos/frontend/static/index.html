@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentor de Estudos | Google ADK</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div>
+          <h1>Mentor de Estudos</h1>
+          <p class="tagline">Planos personalizados com ADK Skills, Revisão Espaçada e Google Agenda</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-toggle-csv" class="btn btn-secondary">
+          📅 Visualizar Agenda CSV (<span id="csv-badge-count">0</span>)
+        </button>
+        <button id="btn-new-chat" class="btn btn-outline" title="Iniciar nova conversa">
+          🔄 Nova Conversa
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <!-- Chat Area -->
+      <main class="chat-section">
+        <div id="chat-messages" class="chat-messages">
+          <!-- Welcome card -->
+          <div class="welcome-card" id="welcome-card">
+            <div class="welcome-icon">👋</div>
+            <h2>Olá! Sou seu Mentor de Estudos.</h2>
+            <p>Posso te ajudar a transformar qualquer meta de aprendizado em um cronograma com técnica de estudo (Feynman, prática intercalada, recuperação ativa), checkpoints e arquivo CSV para o <strong>Google Agenda</strong>.</p>
+            
+            <div class="quick-prompts-title">💡 Experimente clicar em um dos exemplos abaixo:</div>
+            <div class="quick-prompts">
+              <button class="quick-btn" data-text="Quero organizar meus estudos de JavaScript.">
+                <span class="qb-tag">Teste de Gating</span>
+                <span class="qb-text">"Quero organizar meus estudos de JavaScript."</span>
+              </button>
+              <button class="quick-btn" data-text="Quero aprender JavaScript para fazer meu primeiro projeto de portfólio em 5 semanas. Começo segunda que vem. Posso estudar segunda, quarta e sexta, 2h por dia às 19h. Já sei HTML e CSS, mas nunca programei.">
+                <span class="qb-tag">Plano Completo</span>
+                <span class="qb-text">"Quero aprender JS em 5 semanas, seg/qua/sex às 19h..."</span>
+              </button>
+              <button class="quick-btn" data-text="Perdi as sessões de quarta e sexta da primeira semana. Ajusta o plano?">
+                <span class="qb-tag">Replanejamento</span>
+                <span class="qb-text">"Perdi as sessões de quarta e sexta. Ajusta o plano?"</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="input-bar">
+          <form id="chat-form" class="chat-form">
+            <textarea
+              id="user-input"
+              placeholder="Digite seu objetivo de estudos ou responda às perguntas do mentor..."
+              rows="1"
+              required
+            ></textarea>
+            <button type="submit" id="btn-send" class="btn btn-primary" title="Enviar mensagem">
+              <span>Enviar</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </button>
+          </form>
+          <div class="input-hint">
+            <span>Pressione <kbd>Enter</kbd> para enviar ou <kbd>Shift + Enter</kbd> para nova linha</span>
+          </div>
+        </div>
+      </main>
+
+      <!-- CSV & Schedule Sidebar / Drawer -->
+      <aside id="csv-sidebar" class="csv-sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">
+            <h3>📅 Agenda de Estudos</h3>
+            <span id="csv-status-tag" class="tag tag-empty">Nenhum CSV gerado</span>
+          </div>
+          <button id="btn-close-sidebar" class="btn-icon" title="Fechar painel">✕</button>
+        </div>
+
+        <div class="sidebar-content">
+          <div id="csv-actions-panel" class="csv-actions-panel hidden">
+            <a id="btn-download-csv" href="/api/download-csv" download class="btn btn-download">
+              📥 Baixar plano-de-estudos.csv
+            </a>
+            <details class="instructions-details">
+              <summary>ℹ️ Como importar no Google Agenda?</summary>
+              <ol>
+                <li>Acesse seu <a href="https://calendar.google.com" target="_blank" rel="noreferrer">Google Agenda</a></li>
+                <li>Clique no ícone de <strong>Configurações (⚙️)</strong> no canto superior direito</li>
+                <li>Vá em <strong>Importar e exportar</strong> no menu lateral</li>
+                <li>Selecione o arquivo <code>plano-de-estudos.csv</code> e clique em <strong>Importar</strong></li>
+              </ol>
+            </details>
+          </div>
+
+          <!-- Table preview -->
+          <div class="csv-table-wrapper">
+            <div id="csv-empty-state" class="empty-state">
+              <p>Nenhum cronograma gerado ainda.</p>
+              <small>Envie suas metas de estudo ao mentor para gerar o plano em CSV!</small>
+            </div>
+            <table id="csv-preview-table" class="csv-table hidden">
+              <thead>
+                <tr id="csv-table-headers"></tr>
+              </thead>
+              <tbody id="csv-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
